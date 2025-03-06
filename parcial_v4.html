@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Corte #1 Parcial</title>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <link rel="stylesheet" href="styles.css">
+
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; background-color: #c1f3ae; }
+        table { width: 60%; margin: 20px auto; border-collapse: collapse; }
+        th, td { border: 1px solid rgb(5, 253, 46); padding: 8px; text-align: center; }
+        th { background-color: #1d9412; color: white; }
+        .container { margin: 20px; }
+    </style>
+</head>
+
+<body>
+    <h1>Corte 1 Parcial</h1>
+    <h2>Presentado por:</h2>
+    <p>Jesús Alejandro Guerrero Alvarez - Código: 2216710</p>
+    <p>Juan Manuel Tejada Fajardo - Código: 2216685</p>
+<br>
+
+    <h3>Ingrese los coeficientes y los valores de X</h3>
+    <div class="inputs">
+        <br>
+        <label for="a">Coeficiente A (para seno ):</label>
+        <input type="number" id="a" value="1">
+        <br>
+        <label for="b">Coeficiente B (para seno):</label>
+        <input type="number" id="b" value="1">
+        <br>
+        <label for="c">Coeficiente C (para coseno):</label>
+        <input type="number" id="c" value="1">
+        <br>
+        <label for="d">Coeficiente D (para coseno):</label>
+        <input type="number" id="d" value="1">
+        <br>
+        <label for="e">Coeficiente E (para raíz cuadrada):</label>
+        <input type="number" id="e" value="1">
+        <br>
+        <label for="f">Coeficiente F (para raíz cuadrada):</label>
+        <input type="number" id="f" value="1">
+        <br>
+        <label for="g">Coeficiente G (para división):</label>
+        <input type="number" id="g" value="1">
+        <br>
+        <label for="h">Coeficiente H (para división):</label>
+        <input type="number" id="h" value="1">
+        <br>
+        <label for="i">Coeficiente I (para división):</label>
+        <input type="number" id="i" value="1">
+        <br>
+        <label for="j">Coeficiente J (para división):</label>
+        <input type="number" id="j" value="1">
+        <br>
+        <label for="k">Coeficiente K (para división):</label>
+        <input type="number" id="k" value="1">
+    </div>
+    <br>
+    <div class="inputs">
+        <label for="xmin">Valor mínimo de X:</label>
+        <input type="number" id="xmin" value="-5">
+        <br>
+        <label for="xmax">Valor máximo de X:</label>
+        <input type="number" id="xmax" value="5">
+    </div>
+    <br>
+    <button id="procesar" style="padding: 15px 30px; font-size: 18px; background-color: #1d9412; color: white; border: none; border-radius: 10px; cursor: pointer; transition: background-color 0.3s;">
+        Procesar
+    </button>
+    
+    <br>
+    <img src="IMG.PNG" alt="ECUACION">
+    <br>
+    <h3>Resultados</h3>
+    <p>Valor Y Mínimo: <span id="ymin"></span></p>
+    <p>Valor Y Máximo: <span id="ymax"></span></p>
+    <p>Cortes detectados: <span id="cortes"></span></p>
+    
+    <h3>Tabla de valores generados de X e Y</h3>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>X</th>
+                <th>Y</th>
+            </tr>
+        </thead>
+        <tbody id="tablaValores"></tbody>
+    </table>
+
+    <h3>Gráfico</h3>
+    <div id="grafico" style="width: 900px; height: 500px; margin: auto;"></div>
+
+    <script>
+        google.charts.load('current', {'packages':['corechart']});
+        google.charts.setOnLoadCallback(drawChart);
+
+        function calcularY(x, a, b, c, d, e, f, g, h, i, j, k) {
+            if (e === 0 || g === 0 || i === 0 || k === 0) return NaN; // Evitar división por cero
+            let raiz1 = e !== 0 ? Math.sqrt(Math.abs(e * x)) : 0;
+            let raiz2 = f !== 0 ? Math.sqrt(Math.abs(f * x)) : 0;
+            let division1 = (x !== 0) ? (x / g) : 0; // Evitar divisiones por cero
+            let division2 = (x !== 0) ? (x / h) : 0; 
+            let division3 = (x !== 0) ? (x / i) : 0; 
+            let division4 = (x !== 0) ? (x / j) : 0; 
+            let division5 = (x !== 0) ? (x / k) : 0; 
+            
+            return a * Math.sin(x) + b * Math.sin(2 * x) + c * Math.cos(x) + d * Math.cos(2 * x) + raiz1 + raiz2 + division1 + division2 + division3 + division4 + division5;
+        }
+
+        function drawChart(datos = []) {
+            var data = new google.visualization.DataTable();
+            data.addColumn('number', 'X');
+            data.addColumn('number', 'Y');
+            data.addRows(datos);
+            var options = { title: 'Gráfico de Y en función de X', curveType: 'function', legend: { position: 'bottom' } };
+            var chart = new google.visualization.LineChart(document.getElementById('grafico'));
+            chart.draw(data, options);
+        }
+
+        document.getElementById('procesar').addEventListener('click', () => {
+            let a = parseFloat(document.getElementById('a').value);
+            let b = parseFloat(document.getElementById('b').value);
+            let c = parseFloat(document.getElementById('c').value);
+            let d = parseFloat(document.getElementById('d').value);
+            let e = parseFloat(document.getElementById('e').value);
+            let f = parseFloat(document.getElementById('f').value);
+            let g = parseFloat(document.getElementById('g').value);
+            let h = parseFloat(document.getElementById('h').value);
+            let i = parseFloat(document.getElementById('i').value);
+            let j = parseFloat(document.getElementById('j').value);
+            let k = parseFloat(document.getElementById('k').value);
+            let xmin = parseFloat(document.getElementById('xmin').value);
+            let xmax = parseFloat(document.getElementById('xmax').value);
+            
+            if (isNaN(a) || isNaN(b) || isNaN(c) || isNaN(d) || isNaN(e) || isNaN(f) || isNaN(g) || isNaN(h) || isNaN(i) || isNaN(j) || isNaN(k) || isNaN(xmin) || isNaN(xmax)) {
+                alert("Por favor, ingrese valores numéricos válidos");
+                return;
+            }
+            
+            let ymin = Infinity, ymax = -Infinity, cortes = 0;
+            let datos = [], tablaHTML = "";
+            let ultimoY = null;
+
+            for (let x = xmin; x <= xmax; x += 0.5) {
+                let y = calcularY(x, a, b, c, d, e, f, g, h, i, j, k);
+                if (!isNaN(y) && isFinite(y)) {
+                    datos.push([x, y]);
+                    tablaHTML += `<tr><td>${x.toFixed(2)}</td><td>${y.toFixed(2)}</td></tr>`;
+                    
+                    if (y < ymin) ymin = y;
+                    if (y > ymax) ymax = y;
+
+                    if (ultimoY !== null && (ultimoY * y < 0)) {
+                        cortes++;
+                    }
+                    ultimoY = y;
+                }
+            }
+
+            document.getElementById('ymin').innerText = ymin.toFixed(2);
+            document.getElementById('ymax').innerText = ymax.toFixed(2);
+            document.getElementById('cortes').innerText = cortes;
+            document.getElementById('tablaValores').innerHTML = tablaHTML;
+            drawChart(datos);
+        });
+    </script>
+</body>
+</html>
